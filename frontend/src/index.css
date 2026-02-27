@@ -1,0 +1,166 @@
+/* ===============================
+   GLOBAL STYLES
+=============================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #333;
+}
+
+/* ===============================
+   MAIN CONTAINER
+=============================== */
+.container {
+  background-color: #222;
+  color: #fff;
+  width: 500px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+/* ===============================
+   PLAYER SECTION
+=============================== */
+.player {
+  flex: 2;
+  text-align: center;
+}
+
+.player h2 {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.player h3,
+.player h4 {
+  font-weight: normal;
+  font-size: 14px;
+  color: #aaa;
+}
+
+/* ===============================
+   RANGE INPUTS
+=============================== */
+input[type="range"] {
+  width: 100%;
+  height: 5px;
+  margin: 10px 0;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #444;
+  border-radius: 5px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background: #1db954;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* ===============================
+   CONTROLS
+=============================== */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 10px 0;
+}
+
+.controls button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: white;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.controls button:hover {
+  color: #1db954;
+}
+
+/* ===============================
+   HEART BUTTON
+=============================== */
+.heart-btn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: gray;
+  transition: transform 0.2s ease, color 0.3s ease;
+}
+
+.heart-btn.liked {
+  color: red;
+  transform: scale(1.1);
+}
+
+/* ===============================
+   LIST SECTION
+=============================== */
+.list {
+  flex: 1;
+}
+
+.playlist-container,
+.favorites-container {
+  background: #333;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.playlist-container h3,
+.favorites-container h3 {
+  font-size: 14px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #555;
+  padding-bottom: 5px;
+}
+
+ul {
+  list-style: none;
+}
+
+ul li {
+  padding: 8px;
+  margin: 5px 0;
+  background: #444;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+ul li:hover {
+  background: #555;
+}
+
+/* ===============================
+   RESPONSIVE
+=============================== */
+@media (max-width: 600px) {
+  .container {
+    width: 95%;
+    flex-direction: column;
+  }
+}
