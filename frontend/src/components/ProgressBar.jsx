@@ -12,6 +12,7 @@ export default function ProgressBar({
         onChange={(e) => onProgressChange(e.target.value)}
       />
 
+      <label>Volume:</label>
       <input
         type="range"
         min="0"

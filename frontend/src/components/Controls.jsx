@@ -1,9 +1,4 @@
-export default function Controls({
-  isPlaying,
-  onPlayPause,
-  onNext,
-  onPrev
-}) {
+export default function Controls({ isPlaying, onPlayPause, onNext, onPrev }) {
   return (
     <div className="controls">
       <button onClick={onPrev}>⏮</button>
