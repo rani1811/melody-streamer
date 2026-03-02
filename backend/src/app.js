@@ -9,6 +9,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("Music Backend API Running 🚀");
+});
+
 // Serve music folder
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
