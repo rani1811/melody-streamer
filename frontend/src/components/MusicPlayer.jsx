@@ -33,7 +33,6 @@ export default function MusicPlayer() {
         setPlaylist(songs);
       })
       .catch(() => {
-        // fallback demo song
         setPlaylist([
           {
             name: "Sample Song",
@@ -45,25 +44,45 @@ export default function MusicPlayer() {
       });
   }, []);
 
-  /* Load song when index changes */
+  /* ===============================
+     LOAD SONG WHEN INDEX CHANGES
+  =============================== */
   useEffect(() => {
-    if (playlist.length > 0) {
-      audioRef.current.src = playlist[currentIndex].src;
+    if (!playlist.length || !audioRef.current) return;
+
+    const audio = audioRef.current;
+
+    audio.src = playlist[currentIndex].src;
+    audio.load(); // 🔥 important
+
+    if (isPlaying) {
+      audio.play().catch(err => console.error(err));
     }
   }, [currentIndex, playlist]);
 
-  const togglePlay = () => {
-    if (!audioRef.current.src) return;
+  /* ===============================
+     PLAY / PAUSE
+  =============================== */
+  const togglePlay = async () => {
+    const audio = audioRef.current;
+    if (!audio || !audio.src) return;
 
-    if (audioRef.current.paused) {
-      audioRef.current.play();
-      setIsPlaying(true);
-    } else {
-      audioRef.current.pause();
-      setIsPlaying(false);
+    try {
+      if (audio.paused) {
+        await audio.play();
+        setIsPlaying(true);
+      } else {
+        audio.pause();
+        setIsPlaying(false);
+      }
+    } catch (err) {
+      console.error("Audio play error:", err);
     }
   };
 
+  /* ===============================
+     NEXT / PREVIOUS
+  =============================== */
   const changeSong = (direction) => {
     if (!playlist.length) return;
 
@@ -71,31 +90,40 @@ export default function MusicPlayer() {
       (currentIndex + direction + playlist.length) % playlist.length;
 
     setCurrentIndex(newIndex);
-
-    setTimeout(() => {
-      audioRef.current.play();
-      setIsPlaying(true);
-    }, 100);
+    setIsPlaying(true);
   };
 
+  /* ===============================
+     PROGRESS
+  =============================== */
   const handleTimeUpdate = () => {
     const audio = audioRef.current;
-    if (audio.duration) {
+    if (audio && audio.duration) {
       setProgress((audio.currentTime / audio.duration) * 100);
     }
   };
 
   const handleProgressChange = (value) => {
     const audio = audioRef.current;
+    if (!audio || !audio.duration) return;
+
     setProgress(value);
     audio.currentTime = (value / 100) * audio.duration;
   };
 
+  /* ===============================
+     VOLUME
+  =============================== */
   const handleVolumeChange = (value) => {
     setVolume(value);
-    audioRef.current.volume = value;
+    if (audioRef.current) {
+      audioRef.current.volume = value;
+    }
   };
 
+  /* ===============================
+     FAVORITES
+  =============================== */
   const toggleFavorite = () => {
     const song = playlist[currentIndex];
     const exists = favorites.find(f => f.src === song.src);
@@ -107,6 +135,9 @@ export default function MusicPlayer() {
     }
   };
 
+  /* ===============================
+     LOCAL FILE INSERT
+  =============================== */
   const handleInsertClick = () => {
     fileInputRef.current.click();
   };
@@ -127,11 +158,7 @@ export default function MusicPlayer() {
     const updated = [...playlist, newSong];
     setPlaylist(updated);
     setCurrentIndex(updated.length - 1);
-
-    setTimeout(() => {
-      audioRef.current.play();
-      setIsPlaying(true);
-    }, 100);
+    setIsPlaying(true);
   };
 
   const isFavorite = favorites.some(
@@ -139,96 +166,89 @@ export default function MusicPlayer() {
   );
 
   return (
-  <div className={`container ${showPlaylist || showFavorites ? "expanded" : ""}`}>
+    <div className={`container ${showPlaylist || showFavorites ? "expanded" : ""}`}>
 
-    {/* LEFT SIDE - PLAYER */}
-    <div className="player">
+      <div className="player">
+        <h2>{playlist[currentIndex]?.name || "Song Title"}</h2>
+        <h3>{playlist[currentIndex]?.artist || "Artist Name"}</h3>
+        <h4>{playlist[currentIndex]?.album || "Album Name"}</h4>
 
-      <h2>{playlist[currentIndex]?.name || "Song Title"}</h2>
-      <h3>{playlist[currentIndex]?.artist || "Artist Name"}</h3>
-      <h4>{playlist[currentIndex]?.album || "Album Name"}</h4>
+        <audio
+          ref={audioRef}
+          onTimeUpdate={handleTimeUpdate}
+          onEnded={() => changeSong(1)}
+        />
 
-      <audio
-        ref={audioRef}
-        onTimeUpdate={handleTimeUpdate}
-        onEnded={() => changeSong(1)}
-      />
+        <ProgressBar
+          progress={progress}
+          volume={volume}
+          onProgressChange={handleProgressChange}
+          onVolumeChange={handleVolumeChange}
+        />
 
-      <ProgressBar
-        progress={progress}
-        volume={volume}
-        onProgressChange={handleProgressChange}
-        onVolumeChange={handleVolumeChange}
-      />
+        <Controls
+          isPlaying={isPlaying}
+          onPlayPause={togglePlay}
+          onNext={() => changeSong(1)}
+          onPrev={() => changeSong(-1)}
+        />
 
-      <Controls
-        isPlaying={isPlaying}
-        onPlayPause={togglePlay}
-        onNext={() => changeSong(1)}
-        onPrev={() => changeSong(-1)}
-      />
+        <div className="buttons">
+          <button onClick={() => setShowPlaylist(prev => !prev)}>
+            Playlist
+          </button>
 
-      <div className="buttons">
-        <button onClick={() => setShowPlaylist(prev => !prev)}>
-          Playlist
-        </button>
+          <button
+            className={`heart-btn ${isFavorite ? "liked" : ""}`}
+            onClick={toggleFavorite}
+          >
+            ❤
+          </button>
 
-        <button
-          className={`heart-btn ${isFavorite ? "liked" : ""}`}
-          onClick={toggleFavorite}
-        >
-          ❤
-        </button>
+          <button onClick={handleInsertClick}>+</button>
 
-        <button onClick={handleInsertClick}>+</button>
+          <button onClick={() => setShowFavorites(prev => !prev)}>
+            Favorites
+          </button>
+        </div>
 
-        <button onClick={() => setShowFavorites(prev => !prev)}>
-          Favorites
-        </button>
+        <input
+          type="file"
+          accept="audio/*"
+          ref={fileInputRef}
+          style={{ display: "none" }}
+          onChange={handleFileChange}
+        />
       </div>
 
-      <input
-        type="file"
-        accept="audio/*"
-        ref={fileInputRef}
-        style={{ display: "none" }}
-        onChange={handleFileChange}
-      />
+      {(showPlaylist || showFavorites) && (
+        <div className="list">
 
-    </div>
-
-    {/* RIGHT SIDE - LIST PANEL (ONLY WHEN ACTIVE) */}
-    {(showPlaylist || showFavorites) && (
-      <div className="list">
-
-        {showFavorites && (
-          <Favorites
-            favorites={favorites}
-            onSelect={(index) => {
-              const favSong = favorites[index];
-              audioRef.current.src = favSong.src;
-              audioRef.current.play();
-              setIsPlaying(true);
-            }}
-          />
-        )}
-
-        {showPlaylist && (
-          <Playlist
-            playlist={playlist}
-            onSelect={(index) => {
-              setCurrentIndex(index);
-              setTimeout(() => {
+          {showFavorites && (
+            <Favorites
+              favorites={favorites}
+              onSelect={(index) => {
+                const favSong = favorites[index];
+                audioRef.current.src = favSong.src;
+                audioRef.current.load();
                 audioRef.current.play();
                 setIsPlaying(true);
-              }, 100);
-            }}
-          />
-        )}
+              }}
+            />
+          )}
 
-      </div>
-    )}
+          {showPlaylist && (
+            <Playlist
+              playlist={playlist}
+              onSelect={(index) => {
+                setCurrentIndex(index);
+                setIsPlaying(true);
+              }}
+            />
+          )}
 
-  </div>
-);
+        </div>
+      )}
+    </div>
+  );
 }
