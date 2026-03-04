@@ -9,21 +9,27 @@ pipeline {
             }
         }
 
+        stage('Check Docker Access') {
+            steps {
+                sh 'docker ps'
+            }
+        }
+
         stage('Build Docker Images') {
             steps {
-                sh 'docker-compose build'
+                sh 'docker compose build'
             }
         }
 
         stage('Stop Old Containers') {
             steps {
-                sh 'docker-compose down'
+                sh 'docker compose down || true'
             }
         }
 
         stage('Start Containers') {
             steps {
-                sh 'docker-compose up -d'
+                sh 'docker compose up -d'
             }
         }
 
@@ -31,6 +37,16 @@ pipeline {
             steps {
                 sh 'docker ps'
             }
+        }
+
+    }
+
+    post {
+        success {
+            echo 'Deployment Successful 🚀'
+        }
+        failure {
+            echo 'Pipeline Failed ❌'
         }
     }
 }
