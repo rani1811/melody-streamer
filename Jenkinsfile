@@ -5,7 +5,7 @@ pipeline {
 
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/rani1811/melody-streamer.git'
+                git branch: 'main', url: 'https://github.com/rani1811/melody-streamer.git'
             }
         }
 
