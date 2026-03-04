@@ -28,7 +28,7 @@ export default function MusicPlayer() {
           name: song.title,
           artist: song.artist,
           album: "Album",
-          src: song.file_url
+	  src: song.file_url || `/music/${song.file_name}`
         }));
         setPlaylist(songs);
       })

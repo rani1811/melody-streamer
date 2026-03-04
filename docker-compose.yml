@@ -1,6 +1,7 @@
 version: "3.8"
 
 services:
+  # MySQL database
   mysql:
     image: mysql:8
     container_name: mysql-db
@@ -13,6 +14,7 @@ services:
     networks:
       - app-network
 
+  # Backend service
   backend:
     build: ./backend
     container_name: backend
@@ -33,6 +35,7 @@ services:
     volumes:
       - ./backend/music:/app/music
 
+  # Frontend service
   frontend:
     build: ./frontend
     container_name: frontend
@@ -44,8 +47,22 @@ services:
     networks:
       - app-network
 
+  # Jenkins service
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    restart: unless-stopped
+    ports:
+      - "8090:8080"    # Host port 8090 maps to container 8080
+      - "50000:50000"  # Jenkins agents
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    networks:
+      - app-network
+
 volumes:
   mysql_data:
+  jenkins_home:
 
 networks:
   app-network:
