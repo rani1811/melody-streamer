@@ -24,7 +24,7 @@ export default function MusicPlayer() {
     fetch("/api/songs")
       .then(res => res.json())
       .then(data => {
-        const songs = data.map(song => ({
+        const songs = data.songs.map(song => ({
           name: song.title,
           artist: song.artist,
           album: "Album",

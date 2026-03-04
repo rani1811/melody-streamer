@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   mysql:
     image: mysql:8
@@ -24,12 +26,13 @@ services:
       PORT: 5000
     depends_on:
       - mysql
-    expose:
-      - "5000"
+    ports:
+      - "5000:5000"
     networks:
       - app-network
     volumes:
       - ./backend/music:/app/music
+
   frontend:
     build: ./frontend
     container_name: frontend

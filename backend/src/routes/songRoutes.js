@@ -34,7 +34,7 @@ function getSongsFromFolder() {
 }
 
 // ✅ MAIN API
-router.get("/songs", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     // try MySQL first
     const [rows] = await pool.query("SELECT * FROM songs");
