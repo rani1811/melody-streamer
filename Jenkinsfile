@@ -39,6 +39,19 @@ pipeline {
                 sh 'docker ps'
             }
         }
+        stages {
+    stage('Clean Workspace') {
+      steps {
+        deleteDir()
+      }
+    }
+
+    stage('Checkout') {
+      steps {
+        git branch: 'main',
+            url: 'https://github.com/rani1811/melody-streamer.git'
+      }
+    }
 
     }
 }
