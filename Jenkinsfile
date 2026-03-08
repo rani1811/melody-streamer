@@ -3,12 +3,13 @@ pipeline {
 
     stages {
 
-        stage('Clone Repository') {
+        stage('Clean Workspace') {
             steps {
-                git 'https://github.com/rani1811/melody-streamer.git'
+                deleteDir()
             }
         }
 
+        // Jenkins already checked out SCM automatically
         stage('Check Files') {
             steps {
                 sh 'pwd'
@@ -39,19 +40,14 @@ pipeline {
                 sh 'docker ps'
             }
         }
-        stages {
-    stage('Clean Workspace') {
-      steps {
-        deleteDir()
-      }
     }
 
-    stage('Checkout') {
-      steps {
-        git branch: 'main',
-            url: 'https://github.com/rani1811/melody-streamer.git'
-      }
-    }
-
+    post {
+        success {
+            echo 'Deployment Successful ✅'
+        }
+        failure {
+            echo 'Pipeline Failed ❌'
+        }
     }
 }
