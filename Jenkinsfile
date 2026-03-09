@@ -9,17 +9,16 @@ pipeline {
             }
         }
 
-        // Jenkins already checked out SCM automatically
+        stage('Checkout Code') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Check Files') {
             steps {
                 sh 'pwd'
                 sh 'ls -l'
-            }
-        }
-
-        stage('Check Docker Access') {
-            steps {
-                sh 'docker ps'
             }
         }
 
@@ -39,15 +38,6 @@ pipeline {
             steps {
                 sh 'docker ps'
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'Deployment Successful ✅'
-        }
-        failure {
-            echo 'Pipeline Failed ❌'
         }
     }
 }
