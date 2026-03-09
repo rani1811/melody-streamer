@@ -29,7 +29,7 @@ RUN apt-get update && \
     apt-get clean
 
 # Fix docker socket permissions
-RUN groupadd -g 999 docker || true
+RUN groupadd -g 113 docker || true
 RUN usermod -aG docker jenkins
 
 USER jenkins
