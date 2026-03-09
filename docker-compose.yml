@@ -49,7 +49,6 @@ services:
 
 volumes:
   mysql_data:
-  jenkins_home:
 
 networks:
   app-network:
