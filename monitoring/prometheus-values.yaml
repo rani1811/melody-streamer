@@ -1,0 +1,11 @@
+grafana:
+  adminPassword: admin
+
+  sidecar:
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+
+  dashboardsConfigMaps:
+    music-app:
+      file: grafana-dashboard
