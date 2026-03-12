@@ -21,29 +21,29 @@ pipeline {
 
     stage('Build Images') {
       steps {
-        sh 'docker build -t rani1811/music-frontend:$IMAGE_TAG ./frontend'
-        sh 'docker build -t rani1811/music-backend:$IMAGE_TAG ./backend'
+        sh "docker build -t raniingale2025/music-frontend:${IMAGE_TAG} ./frontend"
+        sh "docker build -t raniingale2025/music-backend:${IMAGE_TAG} ./backend"
       }
     }
 
     stage('Push Images') {
       steps {
-        sh 'echo $DOCKERHUB_CREDS_PSW | docker login -u $DOCKERHUB_CREDS_USR --password-stdin'
-        sh 'docker push rani1811/music-frontend:$IMAGE_TAG'
-        sh 'docker push rani1811/music-backend:$IMAGE_TAG'
+        sh "echo $DOCKERHUB_CREDS_PSW | docker login -u $DOCKERHUB_CREDS_USR --password-stdin"
+        sh "docker push raniingale2025/music-frontend:${IMAGE_TAG}"
+        sh "docker push raniingale2025/music-backend:${IMAGE_TAG}"
       }
     }
 
     stage('Deploy to K8s') {
       steps {
-        sh 'kubectl set image deployment/frontend frontend=rani1811/music-frontend:$IMAGE_TAG -n music-app'
-        sh 'kubectl set image deployment/backend backend=rani1811/music-backend:$IMAGE_TAG -n music-app'
+        sh "kubectl set image deployment/frontend frontend=raniingale2025/music-frontend:${IMAGE_TAG} -n music-app"
+        sh "kubectl set image deployment/backend backend=raniingale2025/music-backend:${IMAGE_TAG} -n music-app"
       }
     }
 
     stage('Smoke Test') {
       steps {
-        sh 'curl -f http://melody-streamer.duckdns.org || exit 1'
+        sh "curl -f http://melody-streamer.duckdns.org || exit 1"
       }
     }
   }
