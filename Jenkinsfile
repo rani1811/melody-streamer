@@ -3,13 +3,20 @@ pipeline {
 
   environment {
     DOCKERHUB_CREDS = credentials('dockerhub-creds')
-    IMAGE_TAG = "${env.BUILD_NUMBER}"
   }
 
   stages {
 
     stage('Checkout') {
       steps { checkout scm }
+    }
+
+    stage('Get Git Commit') {
+      steps {
+        script {
+          IMAGE_TAG = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+        }
+      }
     }
 
     stage('Build Images') {
