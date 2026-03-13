@@ -21,7 +21,7 @@ Melody Streamer is a two-tier music streaming platform consisting of:
 The project demonstrates how to implement a production-style DevOps pipeline
 
 ## 🏗 Architecture
-
+```bash
 Developer 
    |
    ▼
@@ -46,7 +46,7 @@ Jenkins CI/CD Pipeline
             │
             ▼
            Users
-
+```
 
 #### Monitoring Layer
 
@@ -75,7 +75,7 @@ Terraform → AWS Infrastructure
 
 
 ## 📁 Project Structure
-
+```bash
 melody-streamer/
 │
 ├── frontend/
@@ -113,7 +113,7 @@ melody-streamer/
 │
 └── README.md
 
-
+```
 
 ## ☁️ Infrastructure Setup (Terraform)
 
