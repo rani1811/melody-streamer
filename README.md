@@ -108,11 +108,10 @@ melody-streamer/
 │   ├── prometheus-values.yaml
 │   └── grafana-dashboard.json
 │
-├── jenkinsfile
-│   
+├──  Jenkinsfile
+│ 
 │
 └── README.md
-
 
 
 
