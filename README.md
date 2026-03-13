@@ -258,7 +258,7 @@ Blue-Green deployments
 
 Rani Ingle
 
-DevOps Engineer (Transitioning from Frontend Development)
+DevOps Engineer 
 
 GitHub: 
 ```bash
